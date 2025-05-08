@@ -52,4 +52,18 @@ Here is a pre-start checklist:
 
 ## Implementation
 
-** ADD YOUR IMPLEMENTATION DOCUMENTATION HERE **
+### Phase 2: Build and Run the Application
+
+<ol>
+  <li>
+    <strong>Build the Docker Image</strong><br/>
+    <p>Run the following command to build the image:</p>
+    <pre><code>docker build -t pyapp:0.0.1 .</code></pre>
+  </li>
+  <li>
+    <strong>Run the Docker Container</strong><br/>
+    <p>Execute the following command to run the container and display the application version:</p>
+    <pre><code>docker run pyapp:0.0.1</code></pre>
+  </li>
+</ol>
+
