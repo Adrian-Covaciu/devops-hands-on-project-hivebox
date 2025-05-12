@@ -1,6 +1,5 @@
 from datetime import datetime, timezone, timedelta
 from flask import Blueprint
-import json
 import requests
 
 box_ids = [
@@ -31,7 +30,7 @@ def average_temperature(box_ids):
     if count == 0:
         return None  # Avoid division by zero
     average = temp_sum / count
-    return json.dumps({"average_temperature": average})
+    return {"average_temperature": average}
 
 temperature = Blueprint('temperature', __name__ )
 
