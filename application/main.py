@@ -1,3 +1,4 @@
+"""Main entry point for the Flask application."""
 
 from flask import Flask
 from blueprints import temperature, version

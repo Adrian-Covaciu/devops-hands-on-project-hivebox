@@ -1,3 +1,5 @@
+"""Blueprint for temperature endpoint."""
+
 from datetime import datetime, timezone, timedelta
 from flask import Blueprint
 import requests
@@ -9,11 +11,13 @@ box_ids = [
 ]
 
 def average_temperature(box_ids):
+    """Function that calculates the average temperature 
+    from the last hour of all sensors in the given boxes."""
     temp_sum = 0.0
     count = 0
     for sensor_id in box_ids:
-        URL = f"https://api.opensensemap.org/boxes/{sensor_id}"
-        r = requests.get(url=URL)
+        sensor_url = f"https://api.opensensemap.org/boxes/{sensor_id}"
+        r = requests.get(url=sensor_url, timeout=10)
         data = r.json()
         sensors = data['sensors']
         for sensor in sensors:
@@ -36,4 +40,6 @@ temperature = Blueprint('temperature', __name__ )
 
 @temperature.route('/temperature')
 def get_temperature():
+    """Route to get the average temperature 
+    from the last hour of all sensors in the given boxes."""
     return average_temperature(box_ids)
