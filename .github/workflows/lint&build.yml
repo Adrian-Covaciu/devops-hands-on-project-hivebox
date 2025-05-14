@@ -25,6 +25,14 @@ jobs:
           run: |
             pylint application
 
+        - name: Run tests
+          run: |
+            pytest application/test_main.py
+
         - uses: hadolint/hadolint-action@v3.1.0
           with:
               dockerfile: Dockerfile
+
+        - name: Build Docker image
+          run: |
+            docker build -t hivebox:latest .
