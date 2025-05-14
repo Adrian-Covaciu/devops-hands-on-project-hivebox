@@ -10,12 +10,12 @@ box_ids = [
     "5ade1acf223bd80019a1011c"
 ]
 
-def average_temperature(box_ids):
+def average_temperature(ids):
     """Function that calculates the average temperature 
     from the last hour of all sensors in the given boxes."""
     temp_sum = 0.0
     count = 0
-    for sensor_id in box_ids:
+    for sensor_id in ids:
         sensor_url = f"https://api.opensensemap.org/boxes/{sensor_id}"
         r = requests.get(url=sensor_url, timeout=10)
         data = r.json()
@@ -24,7 +24,7 @@ def average_temperature(box_ids):
             if sensor["title"] == "Temperatur":
                 last_measurement = sensor["lastMeasurement"]["createdAt"]
                 time_measured = datetime.strptime(last_measurement, "%Y-%m-%dT%H:%M:%S.%fZ")
-                time_measured = time_measured.replace(tzinfo=timezone.utc)  # Make it timezone-aware (UTC)
+                time_measured = time_measured.replace(tzinfo=timezone.utc)
                 time_now = datetime.now(timezone.utc)
                 if time_now - time_measured < timedelta(hours=1):
                     temp = float(sensor["lastMeasurement"]["value"])
