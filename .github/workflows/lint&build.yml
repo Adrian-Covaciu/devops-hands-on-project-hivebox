@@ -1,0 +1,44 @@
+
+name: Pull Request Lint & Build
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+  Lint-and-Build:
+    runs-on: ubuntu-24.04
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.13'
+
+        - name: Install dependencies
+          run: |
+            pip install -r requirements.txt
+
+        - name: Run linting
+          run: |
+            pylint application
+
+        - name: Run tests
+          run: |
+            pytest application/test_main.py
+
+        - uses: hadolint/hadolint-action@v3.1.0
+          with:
+              dockerfile: Dockerfile
+
+        - name: Build Docker image
+          run: |
+            docker build -t hivebox:latest .
+
+        - name: Run application and test version endpoint
+          run: |
+            docker run -d -p 5000:5000 --name hivebox_test hivebox:latest
+            sleep 5
+            curl localhost:5000/version
