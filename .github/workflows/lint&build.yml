@@ -36,3 +36,9 @@ jobs:
         - name: Build Docker image
           run: |
             docker build -t hivebox:latest .
+
+        - name: Run application and test version endpoint
+          run: |
+            docoker run -d -p 5000:5000 --name hivebox_test hivebox:latest
+            sleep 5
+            curl localhost:5000/version
