@@ -52,7 +52,7 @@ Here is a pre-start checklist:
 
 ## Implementation
 
-### Phase 2: Build and Run the Application
+### Build and Run the Application
 
 <ol>
   <li>
