@@ -1,11 +1,16 @@
 """Blueprint for temperature endpoint."""
 
 from datetime import datetime, timezone, timedelta
+import os
 from flask import Blueprint
 import requests
-import os
 
-box_ids = os.environ.get("BOX_IDS", "5eba5fbad46fb8001b799786,5c21ff8f919bf8001adf2488,5ade1acf223bd80019a1011c").split(",")
+default_ids = [
+    "5eba5fbad46fb8001b799786",
+    "5c21ff8f919bf8001adf2488",
+    "5ade1acf223bd80019a1011c",
+]
+box_ids = os.environ.get("BOX_IDS", ",".join(default_ids)).split(",")
 
 def average_temperature(ids):
     """Function that calculates the average temperature 
@@ -34,16 +39,15 @@ def average_temperature(ids):
     status = status_temperature(average)
     return {"average_temperature": average, "status": status}
 
-def status_temperature(temperature):
+def status_temperature(temperature_value):
     """Function that returns the status of the temperature."""
-    if temperature is None:
+    if temperature_value is None:
         return "No data available"
-    elif temperature < 10:
+    if temperature_value < 10:
         return "Too Cold"
-    elif 11 <= temperature <= 36:
+    if 11 <= temperature_value <= 36:
         return "Good"
-    else:
-        return "Too Hot"
+    return "Too Hot"
 
 temperature = Blueprint('temperature', __name__ )
 

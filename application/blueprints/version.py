@@ -1,7 +1,8 @@
 """Blueprint for version endpoint."""
 
-from flask import Blueprint
 import os
+from flask import Blueprint
+
 
 version = Blueprint('version', __name__)
 
