@@ -5,12 +5,12 @@ import os
 from flask import Blueprint
 import requests
 
-default_ids = [
+default_box_ids = [
     "5eba5fbad46fb8001b799786",
     "5c21ff8f919bf8001adf2488",
     "5ade1acf223bd80019a1011c",
 ]
-box_ids = os.environ.get("BOX_IDS", ",".join(default_ids)).split(",")
+box_ids = os.environ.get("BOX_IDS", ",".join(default_box_ids)).split(",")
 
 def average_temperature(ids):
     """Function that calculates the average temperature 

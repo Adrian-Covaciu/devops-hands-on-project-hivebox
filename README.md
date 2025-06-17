@@ -67,3 +67,31 @@ Here is a pre-start checklist:
   </li>
 </ol>
 
+### Deploy in minikube
+
+<ol>
+  <li>
+  <strong>Install and run minikube</strong><br/>
+    <p>Go to minikube documentation for setup instructions https://minikube.sigs.k8s.io/docs/</p>
+    <pre><code>docker build -t pyapp:0.0.1 .</code></pre>
+  </li>
+  <li>
+  <li>
+    <strong>Enable ingress and change the service type</strong><br/>
+    <p>Enable the ingress addon and fix the default NodePort service type to be LoadBalancer</p>
+    <pre><code>
+    minikube addons enable ingress
+    kubectl patch svc ingress-nginx-controller -n ingress-nginx -p '{"spec": {"type": "LoadBalancer"}}'
+    </code></pre>
+  </li>
+  <li>
+    <strong>Add hosts and run manifests</strong><br/>
+    <p>To simulate real world scenarios an entry in /etc/hosts has to be added</p>
+    <pre><code>
+    sudo vi /etc/hosts
+    127.0.0.1 pyapp.local
+    kubectl apply -f manifests
+    curl pyapp.local/version && curl pyapp.local/temperature
+    </code></pre>
+  </li>
+</ol>
