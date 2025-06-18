@@ -32,7 +32,7 @@ jobs:
             -Dsonar.projectKey=Adrian-Covaciu_devops-hands-on-project-hivebox
             -Dsonar.sources=.
             -Dsonar.tests=application
+            -Dsonar.test.inclusions=application/test_*.py
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.verbose=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
