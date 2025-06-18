@@ -1,0 +1,38 @@
+name: SonarCloud Analysis
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '${{ vars.PYTHON_VERSION }}'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run tests and generate coverage
+        run: |
+          coverage run -m pytest
+          coverage xml -o coverage.xml
+
+      - name: SonarCloud scan
+        uses: SonarSource/sonarcloud-github-action@v3.1.0
+        with:
+          args: >
+            -Dsonar.organization=adrian-covaciu
+            -Dsonar.projectKey=adrian-covaciu_devops-hands-on-project-hivebox
+            -Dsonar.sources=.
+            -Dsonar.tests=application
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.verbose=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

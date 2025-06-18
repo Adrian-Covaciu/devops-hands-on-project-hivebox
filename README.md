@@ -52,9 +52,9 @@ Here is a pre-start checklist:
 
 ## Implementation
 
-### Linters to complete an MR
+### Tests and Lints to complete a PR
 
-<strong>This repository uses pylint and hadolint to check and pass the pipeline</strong>
+This repository uses pylint and hadolint to check and pass the pipeline. It also performs an analysis using SonarCloud.
 
 ### Build and Run the Application
 
