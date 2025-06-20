@@ -34,7 +34,7 @@ def average_temperature(ids):
                     temp_sum += temp
                     count += 1
     if count == 0:
-        return None  # Avoid division by zero
+        return None
     average = temp_sum / count
     status = status_temperature(average)
     return {"average_temperature": average, "status": status}
