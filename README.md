@@ -52,18 +52,71 @@ Here is a pre-start checklist:
 
 ## Implementation
 
-### Phase 2: Build and Run the Application
+### Tests and Lints to complete a PR
+
+This repository uses pylint and hadolint to check and pass the pipeline. It also performs an analysis using SonarCloud.
+
+### Build and Run the Application
 
 <ol>
   <li>
     <strong>Build the Docker Image</strong><br/>
     <p>Run the following command to build the image:</p>
-    <pre><code>docker build -t pyapp:0.0.1 .</code></pre>
+    <pre><code>docker build -t pyapp:latest .</code></pre>
   </li>
+
   <li>
     <strong>Run the Docker Container</strong><br/>
     <p>Execute the following command to run the container and display the application version:</p>
-    <pre><code>docker run pyapp:0.0.1</code></pre>
+    <pre><code>docker run pyapp:latest</code></pre>
   </li>
 </ol>
 
+### Deploy in minikube
+
+<ol>
+  <li>
+  <strong>Install and run minikube</strong><br/>
+    <p>Go to minikube documentation for setup instructions https://minikube.sigs.k8s.io/docs/</p>
+  </li>
+
+  <li>
+    <strong>Enable ingress and change the service type</strong><br/>
+    <p>Enable the ingress addon and fix the default NodePort service type to be LoadBalancer</p>
+    <pre><code>
+    minikube addons enable ingress
+    kubectl patch svc ingress-nginx-controller -n ingress-nginx \
+      -p '{"spec": {"type": "LoadBalancer"}}'
+    </code></pre>
+  </li>
+
+  <li>
+    <strong>Start the tunnel</strong><br/>
+    <p>This simulates a cloud LoadBalancer locally:</p>
+    <pre><code>minikube tunnel</code></pre>
+  </li>
+
+  <li>
+    <strong>Apply Kubernetes manifests</strong><br/>
+    <p>Deploy your app and ingress resources:</p>
+    <pre><code>kubectl apply -f manifests/</code></pre>
+  </li>
+
+  <li>
+    <strong>Update your hosts file</strong><br/>
+    <p>Point your custom domain to the LoadBalancer External-IP:</p>
+    <pre><code>
+    sudo vi /etc/hosts
+    127.0.0.1 pyapp.local
+    </code></pre>
+  </li>
+
+  <li>
+    <strong>Test the app</strong><br/>
+    <p>Access it via Ingress like a real domain:</p>
+    <pre><code>
+    curl http://pyapp.local/version
+    curl http://pyapp.local/temperature
+    </code></pre>
+  </li>
+</ol>
