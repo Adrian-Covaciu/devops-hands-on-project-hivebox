@@ -6,7 +6,7 @@ from flask import Blueprint
 
 version = Blueprint('version', __name__)
 
-application_version = os.environ.get("APPLICATION_VERSION", "0.0.3")
+application_version = os.environ.get("APPLICATION_VERSION", "0.0.5")
 
 @version.route("/version")
 def app_version():

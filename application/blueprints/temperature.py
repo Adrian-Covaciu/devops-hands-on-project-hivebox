@@ -1,8 +1,9 @@
 """Blueprint for temperature endpoint."""
 
 from datetime import datetime, timezone, timedelta
-import os
 from flask import Blueprint
+from extensions import cache
+import os
 import requests
 
 default_box_ids = [
@@ -52,6 +53,7 @@ def status_temperature(temperature_value):
 temperature = Blueprint('temperature', __name__ )
 
 @temperature.route('/temperature')
+@cache.cached(timeout=300)
 def get_temperature():
     """Route to get the average temperature 
     from the last hour of all sensors in the given boxes."""

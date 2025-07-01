@@ -2,10 +2,17 @@
 
 from flask import Flask
 from blueprints import temperature, version
+from extensions import cache
 
 app = Flask(__name__)
 app.register_blueprint(temperature, url_prefix='')
 app.register_blueprint(version, url_prefix='')
+app.config.from_object("config")
+
+cache.init_app(app)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host=app.config.get("FLASK_RUN_HOST"),
+        port=app.config.get("FLASK_RUN_PORT"),
+    )
