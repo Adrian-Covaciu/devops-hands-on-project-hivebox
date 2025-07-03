@@ -101,12 +101,6 @@ This repository uses pylint and hadolint to check and pass the pipeline. It also
 
 </ol>
 
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-localhost:5000/temperature?box_ids=580f30787ac61b0010983265,57aa3052f52f21100029a5a9,5879ecfd0eb1a0000f36a145
-
 ### Deploy in minikube
 
 <ol>
