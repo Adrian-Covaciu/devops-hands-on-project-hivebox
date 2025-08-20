@@ -1,12 +1,12 @@
 
-name: Pull Request Lint & Build
+name: Pull Request Lint & Test
 
 on:
     pull_request:
         branches: [main]
 
 jobs:
-  Lint-and-Build:
+  Lint-and-Test:
     runs-on: ubuntu-24.04
     steps:
         - name: Checkout code

@@ -3,7 +3,6 @@
 import os
 from flask import Blueprint
 
-
 version = Blueprint('version', __name__)
 
 application_version = os.environ.get("APPLICATION_VERSION", "0.0.5")
