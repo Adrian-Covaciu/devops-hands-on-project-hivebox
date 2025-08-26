@@ -1,0 +1,6 @@
+application_name         = "hivebox"
+environment_name         = "prod"
+primary_region           = "us-east-1"
+vpc_cidr_block           = "10.0.0.0/21"
+k8s_namespace            = "app"
+k8s_service_account_name = "fleet-portal"
