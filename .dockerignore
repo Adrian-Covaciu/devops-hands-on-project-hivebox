@@ -5,3 +5,6 @@ __pycache__
 
 venv
 README.md
+terraform
+manifests
+compose.yaml

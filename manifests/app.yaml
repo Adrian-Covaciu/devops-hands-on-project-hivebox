@@ -19,3 +19,20 @@ spec:
         image: pyapp:latest
         ports:
         - containerPort: 5000
+        env:
+        - name: CACHE_REDIS_HOST
+          value: "valkey"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyapp-service
+spec:
+  selector:
+    app: pyapp
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000

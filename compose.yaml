@@ -4,6 +4,7 @@ services:
     container_name: valkey
     ports:
       - "6379:6379"
+
   minio:
     image: "quay.io/minio/minio"
     container_name: minio
@@ -16,3 +17,17 @@ services:
       MINIO_ROOT_PASSWORD: changeme
     volumes:
       - ${HOME}/minio/data:/data
+
+  pyapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pyapp:latest
+    container_name: pyapp
+    ports:
+      - "8080:5000"
+    environment:
+      CACHE_REDIS_HOST: valkey
+    depends_on:
+      - valkey
+      - minio

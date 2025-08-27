@@ -17,5 +17,6 @@ init_metrics(app)
 
 if __name__ == "__main__":
     app.run(
-        port=app.config.get("FLASK_PORT")
+        host=app.config.get("FLASK_HOST"),
+        port=app.config.get("FLASK_PORT"),
     )

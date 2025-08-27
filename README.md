@@ -128,7 +128,10 @@ This repository uses pylint and hadolint to check and pass the pipeline. It also
   <li>
     <strong>Apply Kubernetes manifests</strong><br/>
     <p>Deploy your app and ingress resources:</p>
-    <pre><code>kubectl apply -f manifests/</code></pre>
+    <pre><code>
+    minikube image load pyapp:'IMAGE TAG'
+    kubectl apply -f manifests/
+    </code></pre>
   </li>
 
   <li>
