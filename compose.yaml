@@ -18,12 +18,12 @@ services:
     volumes:
       - ${HOME}/minio/data:/data
 
-  pyapp:
+  hivebox:
     build:
       context: .
       dockerfile: Dockerfile
-    image: pyapp:latest
-    container_name: pyapp
+    image: hivebox:latest
+    container_name: hivebox
     ports:
       - "8080:5000"
     environment:

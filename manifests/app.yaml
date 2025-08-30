@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pyapp-deployment
+  name: hivebox-deployment
   labels:
-    app: pyapp
+    app: hivebox
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pyapp
+      app: hivebox
   template:
     metadata:
       labels:
-        app: pyapp
+        app: hivebox
     spec:
       containers:
-      - name: pyapp
-        image: pyapp:latest
+      - name: hivebox
+        image: hivebox:latest
         ports:
         - containerPort: 5000
         env:
@@ -28,10 +28,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pyapp-service
+  name: hivebox-service
 spec:
   selector:
-    app: pyapp
+    app: hivebox
   ports:
     - protocol: TCP
       port: 8080
