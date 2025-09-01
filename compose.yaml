@@ -31,3 +31,18 @@ services:
     depends_on:
       - valkey
       - minio
+
+  # github-runner:
+  #   image: myoung34/github-runner:latest
+  #   container_name: github-runner
+  #   restart: unless-stopped
+  #   environment:
+  #     REPO_URL: https://github.com/Adrian-Covaciu/devops-hands-on-project-hivebox
+  #     RUNNER_NAME: self-hosted-docker-runner
+  #     RUNNER_WORKDIR: /tmp/github-runner
+  #     RUNNER_GROUP: Default
+  #     LABELS: self-hosted
+  #     ACCESS_TOKEN: ${GITHUB_PAT}
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ./runner-data:/tmp/github-runner

@@ -1,12 +1,13 @@
 """Main entry point for the Flask application."""
 
 from flask import Flask
-from blueprints import temperature, version
+from blueprints import index, temperature, version
 from extensions import cache
 from metrics import init_metrics
 
 # Flask app instantiation and blueprints
 app = Flask(__name__)
+app.register_blueprint(index, url_prefix='')
 app.register_blueprint(temperature, url_prefix='')
 app.register_blueprint(version, url_prefix='')
 
