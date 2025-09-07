@@ -1,0 +1,30 @@
+name: Deploy to AWS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request: 
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          role-to-assume: arn:aws:iam::968427496899:role/acovaciu-oidc
+          role-session-name: GitHub_Actions_Terraform
+          aws-region: us-east-1
+      - name: Test
+        run: |
+          aws s3 ls

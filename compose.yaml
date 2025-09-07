@@ -1,0 +1,48 @@
+services:
+  valkey:
+    image: "valkey/valkey"
+    container_name: valkey
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: "quay.io/minio/minio"
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: changeme
+    volumes:
+      - ${HOME}/minio/data:/data
+
+  hivebox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hivebox:latest
+    container_name: hivebox
+    ports:
+      - "8080:5000"
+    environment:
+      CACHE_REDIS_HOST: valkey
+    depends_on:
+      - valkey
+      - minio
+
+  # github-runner:
+  #   image: myoung34/github-runner:latest
+  #   container_name: github-runner
+  #   restart: unless-stopped
+  #   environment:
+  #     REPO_URL: https://github.com/Adrian-Covaciu/devops-hands-on-project-hivebox
+  #     RUNNER_NAME: self-hosted-docker-runner
+  #     RUNNER_WORKDIR: /tmp/github-runner
+  #     RUNNER_GROUP: Default
+  #     LABELS: self-hosted
+  #     ACCESS_TOKEN: ${GITHUB_PAT}
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ./runner-data:/tmp/github-runner

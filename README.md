@@ -72,6 +72,35 @@ This repository uses pylint and hadolint to check and pass the pipeline. It also
   </li>
 </ol>
 
+### Use the application (localhost and default values example)
+
+<ol>
+  <li>
+    <strong>Install pre-requisites</strong><br/>
+    <pre><code>
+      python3 -m venv venv
+      source venv/bin/activate
+      pip install -r requirements.txt
+    </code></pre>
+  </li>
+
+  <li>
+    <strong>Start the application</strong><br/>
+    <pre><code>python3 application/main.py</code></pre>
+  </li>
+
+  <li>
+    <strong>Call version endpoint</strong><br/>
+    <pre><code>curl "localhost:5000/version"</code></pre>
+  </li>
+
+  <li>
+    <strong>Call temperature endpoint with query arguments</strong><br/>
+    <pre><code>curl "localhost:5000/temperature?box_ids=580f30787ac61b0010983265,57aa3052f52f21100029a5a9,5879ecfd0eb1a0000f36a145"</code></pre>
+  </li>
+
+</ol>
+
 ### Deploy in minikube
 
 <ol>
@@ -99,7 +128,10 @@ This repository uses pylint and hadolint to check and pass the pipeline. It also
   <li>
     <strong>Apply Kubernetes manifests</strong><br/>
     <p>Deploy your app and ingress resources:</p>
-    <pre><code>kubectl apply -f manifests/</code></pre>
+    <pre><code>
+    minikube image load pyapp:'IMAGE TAG'
+    kubectl apply -f manifests/
+    </code></pre>
   </li>
 
   <li>

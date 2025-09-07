@@ -1,12 +1,12 @@
 
-name: Pull Request Lint & Build
+name: Pull Request Lint & Test
 
 on:
     pull_request:
         branches: [main]
 
 jobs:
-  Lint-and-Build:
+  Lint-and-Test:
     runs-on: ubuntu-24.04
     steps:
         - name: Checkout code
@@ -39,6 +39,6 @@ jobs:
 
         - name: Run application and test version endpoint
           run: |
-            docker run -d -p 5000:5000 --name hivebox_test hivebox:latest
+            docker compose up -d
             sleep 5
-            curl localhost:5000/version
+            curl localhost:8080/version

@@ -1,8 +1,9 @@
 """Blueprint for temperature endpoint."""
 
-from datetime import datetime, timezone, timedelta
 import os
-from flask import Blueprint
+from datetime import datetime, timezone, timedelta
+from flask import Blueprint, request
+from extensions import cache
 import requests
 
 default_box_ids = [
@@ -12,32 +13,38 @@ default_box_ids = [
 ]
 box_ids = os.environ.get("BOX_IDS", ",".join(default_box_ids)).split(",")
 
-def average_temperature(ids):
-    """Function that calculates the average temperature 
-    from the last hour of all sensors in the given boxes."""
-    temp_sum = 0.0
-    count = 0
-    for sensor_id in ids:
-        sensor_url = f"https://api.opensensemap.org/boxes/{sensor_id}"
-        r = requests.get(url=sensor_url, timeout=10)
-        data = r.json()
-        sensors = data['sensors']
-        for sensor in sensors:
-            if sensor["title"] == "Temperatur":
-                last_measurement = sensor["lastMeasurement"]["createdAt"]
-                time_measured = datetime.strptime(last_measurement, "%Y-%m-%dT%H:%M:%S.%fZ")
-                time_measured = time_measured.replace(tzinfo=timezone.utc)
-                time_now = datetime.now(timezone.utc)
-                if time_now - time_measured < timedelta(hours=1):
-                    temp = float(sensor["lastMeasurement"]["value"])
-                    print(f"Sensor ID: {sensor_id}, Temperature: {temp}")
-                    temp_sum += temp
-                    count += 1
-    if count == 0:
+def get_sensor_data(sensor_id):
+    """Fetch sensor data from the API for a given box."""
+    sensor_url = f"https://api.opensensemap.org/boxes/{sensor_id}"
+    r = requests.get(url=sensor_url, timeout=10)
+    return r.json().get("sensors", [])
+
+def extract_temperature(sensor):
+    """Extract temperature if measurement is less than 1 hour old."""
+    if sensor["title"] != "Temperatur":
         return None
-    average = temp_sum / count
-    status = status_temperature(average)
-    return {"average_temperature": average, "status": status}
+    last_measurement = sensor["lastMeasurement"]["createdAt"]
+    time_measured = datetime.strptime(last_measurement, "%Y-%m-%dT%H:%M:%S.%fZ")
+    time_measured = time_measured.replace(tzinfo=timezone.utc)
+    if datetime.now(timezone.utc) - time_measured < timedelta(hours=1):
+        return float(sensor["lastMeasurement"]["value"])
+    return None
+
+@cache.memoize(timeout=300)
+def average_temperature(ids):
+    """Calculate average temperature."""
+    temps = []
+    for sensor_id in ids:
+        sensors = get_sensor_data(sensor_id)
+        for sensor in sensors:
+            temp = extract_temperature(sensor)
+            if temp is not None:
+                temps.append(temp)
+                print(f"Sensor ID: {sensor_id}, Temperature: {temp}")
+    if not temps:
+        return None
+    average = sum(temps) / len(temps)
+    return {"average_temperature": average, "status": status_temperature(average)}
 
 def status_temperature(temperature_value):
     """Function that returns the status of the temperature."""
@@ -55,4 +62,9 @@ temperature = Blueprint('temperature', __name__ )
 def get_temperature():
     """Route to get the average temperature 
     from the last hour of all sensors in the given boxes."""
-    return average_temperature(box_ids)
+    box_ids_args = request.args.get("box_ids")
+    if box_ids_args:
+        ids = box_ids_args.split(",")
+    else:
+        ids = box_ids
+    return average_temperature(ids)

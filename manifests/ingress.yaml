@@ -1,18 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pyapp-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: hivebox-ingress
 spec:
   rules:
-  - host: pyapp.local
+  - host: hivebox.local
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: pyapp-service
+            name: hivebox-service
             port:
               number: 8080
