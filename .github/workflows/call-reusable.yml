@@ -1,0 +1,10 @@
+name: Call Reusable Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-echo-workflow:
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      message: 'Hello from the caller workflow!'
