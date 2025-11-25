@@ -3,6 +3,9 @@ name: Call Reusable Workflow
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   call-echo-workflow:
     uses: ./.github/workflows/reusable-test.yml
